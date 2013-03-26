@@ -84,7 +84,7 @@ def determine_majority(c):
 h, a, c = read_csv('orchive_svm_25-03-2013.csv')
 
 
-training, classify = partition_lists(h, a, c, 2)
+training, classify = partition_lists(h, a, c)
 #print len(training['heads']), len(classify['heads'])
 
 print len(training['class'])
@@ -100,25 +100,22 @@ total = 0
 
 print len(classify['heads']), len(results[0])
 
-for i in range(len(results[0])):
+i = 0
+while i < len(results[0]):
     j = i
-    while int(classify['heads'][j][1]) == int(classify['heads'][i][1]):
-        if j == len(results[0])-1:
-            break
+    while j < len(results[0]) and int(classify['heads'][j][1]) == int(classify['heads'][i][1]):
         j += 1
-    clip = results[0][i:j]
-    print classify['heads'][i:j]
-    print clip
+    predicted = results[0][i:j]
+    actual = classify['class'][i:j]
     i = j
-    print "i=", i
 
-    '''predicted = determine_majority(results[0][i:i+sublistsize])
-    real = determine_majority(classify['class'][i:i+sublistsize])
-    if predicted == real:
+    predicted_final = determine_majority(predicted)
+    actual_final = determine_majority(actual)
+    if predicted == actual:
         correct += 1
     total += 1
-    #print results[0][i:i+sublistsize], predicted, real
-print "Accuracy = " + str(100*float(correct)/total) + "% (" + str(correct) + "/" + str(total) + ")"
-  '''  
+
+print "Complete Call Accuracy = " + str(100*float(correct)/total) + "% (" + str(correct) + "/" + str(total) + ")"
+ 
 
 
