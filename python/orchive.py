@@ -94,19 +94,31 @@ m = svm_train(training['class'], training['attrs'])
 results = svm_predict(classify['class'],classify['attrs'], m)
 
 
-sublistsize = 6
+
 correct = 0
 total = 0
 
-for i in range(len(results[0]) - sublistsize+1):
-    predicted = determine_majority(results[0][i:i+sublistsize])
+print len(classify['heads']), len(results[0])
+
+for i in range(len(results[0])):
+    j = i
+    while int(classify['heads'][j][1]) == int(classify['heads'][i][1]):
+        if j == len(results[0])-1:
+            break
+        j += 1
+    clip = results[0][i:j]
+    print classify['heads'][i:j]
+    print clip
+    i = j
+    print "i=", i
+
+    '''predicted = determine_majority(results[0][i:i+sublistsize])
     real = determine_majority(classify['class'][i:i+sublistsize])
     if predicted == real:
         correct += 1
     total += 1
     #print results[0][i:i+sublistsize], predicted, real
 print "Accuracy = " + str(100*float(correct)/total) + "% (" + str(correct) + "/" + str(total) + ")"
-    
-
+  '''  
 
 
