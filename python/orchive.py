@@ -40,7 +40,7 @@ def read_csv(fname):
 
 
 
-def partition_lists(h, a, c, n=10):
+'''def partition_lists(h, a, c, n=10):
 
     train = {'heads':[], 'attrs':[], 'class':[]}
     classify = {'heads':[], 'attrs':[], 'class':[]}
@@ -55,10 +55,24 @@ def partition_lists(h, a, c, n=10):
         else:
             train.append(l[i])
 
-    return train, classify
+    return train, classify'''
 
 
+# Takes in a list of class values and returns the majority value
+def determine_majority(c):
+    sum_neg = 0
+    sum_pos = 0
 
+    for i in c:
+        if i == -1:
+            sum_neg += 1
+        else:
+            sum_pos += 1
+
+    if sum_neg > sum_pos:
+        return -1
+    else:
+        return 1
 
 
 h, a, c = read_csv('orchive_svm_25-03-2013.csv')
@@ -69,7 +83,7 @@ at, ac = partition_list(a)
 ct, cc = partition_list(c)
 
 m = svm_train(ct, at)
-resutls = svm_predict([cc[0]],[ac[0]], m, '-b 0')
+results = svm_predict([cc[0]],[ac[0]], m, '-b 0')
 
 print results
 
