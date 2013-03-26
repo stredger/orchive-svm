@@ -40,22 +40,28 @@ def read_csv(fname):
 
 
 
-'''def partition_lists(h, a, c, n=10):
+def partition_lists(h, a, c, n=10):
+
+    id_col = 1
 
     train = {'heads':[], 'attrs':[], 'class':[]}
     classify = {'heads':[], 'attrs':[], 'class':[]}
 
-    if len(l) < n:
-        print "list length larger than fold! exiting"
+    if len(h) < n:
+        print "list length smaller than fold! exiting"
         sys.exit()
 
-    for i in xrange(len(l)):
-        if i % n:
-            classify.append(l[i])
+    for i in xrange(len(h)):
+        if not int(h[i][id_col]) % n:
+            classify['heads'].append(h[i])
+            classify['attrs'].append(a[i])
+            classify['class'].append(c[i])
         else:
-            train.append(l[i])
+            train['heads'].append(h[i])
+            train['attrs'].append(a[i])
+            train['class'].append(c[i])
 
-    return train, classify'''
+    return train, classify
 
 
 # Takes in a list of class values and returns the majority value
@@ -78,12 +84,29 @@ def determine_majority(c):
 h, a, c = read_csv('orchive_svm_25-03-2013.csv')
 
 
-ht, hc = partition_list(h)
-at, ac = partition_list(a)
-ct, cc = partition_list(c)
+training, classify = partition_lists(h, a, c, 2)
+#print len(training['heads']), len(classify['heads'])
 
-m = svm_train(ct, at)
-results = svm_predict([cc[0]],[ac[0]], m, '-b 0')
+print len(training['class'])
+print len(classify['class'])
 
-print results
+m = svm_train(training['class'], training['attrs'])
+results = svm_predict(classify['class'],classify['attrs'], m)
+
+
+sublistsize = 6
+correct = 0
+total = 0
+
+for i in range(len(results[0]) - sublistsize+1):
+    predicted = determine_majority(results[0][i:i+sublistsize])
+    real = determine_majority(classify['class'][i:i+sublistsize])
+    if predicted == real:
+        correct += 1
+    total += 1
+    #print results[0][i:i+sublistsize], predicted, real
+print "Accuracy = " + str(100*float(correct)/total) + "% (" + str(correct) + "/" + str(total) + ")"
+    
+
+
 
