@@ -84,7 +84,7 @@ def determine_majority(c):
 h, a, c = read_csv('orchive_svm_25-03-2013.csv')
 
 
-training, classify = partition_lists(h, a, c)
+training, classify = partition_lists(h, a, c, 2)
 #print len(training['heads']), len(classify['heads'])
 
 print len(training['class'])
@@ -98,8 +98,6 @@ results = svm_predict(classify['class'],classify['attrs'], m)
 correct = 0
 total = 0
 
-print len(classify['heads']), len(results[0])
-
 i = 0
 while i < len(results[0]):
     j = i
@@ -111,11 +109,11 @@ while i < len(results[0]):
 
     predicted_final = determine_majority(predicted)
     actual_final = determine_majority(actual)
-    if predicted == actual:
+    if predicted_final == actual_final:
         correct += 1
     total += 1
 
-print "Complete Call Accuracy = " + str(100*float(correct)/total) + "% (" + str(correct) + "/" + str(total) + ")"
+print "Complete Call Accuracy = " + str(100*float(correct)/float(total)) + "% (" + str(correct) + "/" + str(total) + ")"
  
 
 
